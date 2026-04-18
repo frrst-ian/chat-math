@@ -1,0 +1,7 @@
+.env
+__pycache__/
+*.pyc
+venv/
+outputs/
+manim_scripts/
+.DS_Store
