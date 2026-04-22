@@ -1,13 +1,12 @@
 import os
 import re
 from google import genai
-from dotenv import load_dotenv
+from core.config import settings
 
-load_dotenv()
+client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-
-SYSTEM_PROMPT = """You are ChatMath, a math visualization engine for Junior High School teachers in the Philippines.
+SYSTEM_PROMPT = """
+You are ChatMath, a math visualization engine for Junior High School teachers in the Philippines.
 
 When a teacher asks about a math topic, respond with a Manim CE 0.20.1 Python script that visualizes it, wrapped in <manim> and </manim> tags.
 
@@ -192,30 +191,19 @@ class Visualization(Scene):
         self.wait(2)
 </example>
 
-Study this example carefully. Every script you produce must follow the same coordinate discipline, left/right split, act structure, and animation pacing shown above."""
+Study this example carefully. Every script you produce must follow the same coordinate discipline, left/right split, act structure, and animation pacing shown above.
+"""
 
-
-# In-memory conversation store keyed by conversation_id
-_histories: dict[str, list[dict]] = {}
-
-
-def get_llm_response(message: str, conversation_id: str | None = None) -> dict:
-    history = _histories.get(conversation_id, []) if conversation_id else []
-
-    # Build contents list: system prompt as first user turn, then history, then new message
+def get_llm_response(message: str, history: list[dict]) -> dict:
     contents = [
         {"role": "user", "parts": [{"text": SYSTEM_PROMPT}]},
-        {"role": "model", "parts": [{"text": "Understood. I will respond only with <manim>...</manim> blocks containing valid Manim CE 0.20.1 Python scripts."}]},
+        {"role": "model", "parts": [{"text": "Understood. I will respond only with <manim>...</manim> blocks."}]},
     ]
     for turn in history:
         contents.append({"role": turn["role"], "parts": [{"text": turn["text"]}]})
     contents.append({"role": "user", "parts": [{"text": message}]})
 
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=contents
-    )
-
+    response = client.models.generate_content(model="gemini-2.5-flash", contents=contents)
     full_text = response.text
     manim_script = None
 
@@ -229,17 +217,7 @@ def get_llm_response(message: str, conversation_id: str | None = None) -> dict:
 
     reply = full_text
     if manim_script:
-        manim_block = full_text[full_text.index("<manim>"):full_text.index("</manim>") + len("</manim>")]
-        reply = full_text.replace(manim_block, "").strip()
+        block = full_text[full_text.index("<manim>"):full_text.index("</manim>") + len("</manim>")]
+        reply = full_text.replace(block, "").strip()
 
-    # Store this turn in history
-    if conversation_id:
-        if conversation_id not in _histories:
-            _histories[conversation_id] = []
-        _histories[conversation_id].append({"role": "user", "text": message})
-        _histories[conversation_id].append({"role": "model", "text": full_text})
-
-    return {
-        "reply": reply,
-        "manim_script": manim_script
-    }
+    return {"reply": reply, "manim_script": manim_script}

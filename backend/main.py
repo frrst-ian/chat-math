@@ -1,30 +1,19 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
-from routes.chat import router as chat_router
-import os
+from fastapi import FastAPI
+from core.middleware import register_middleware
+from db.session import init_db
+from routers import chat, video
 
 app = FastAPI(title="ChatMath API")
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+register_middleware(app)
 
-app.include_router(chat_router, prefix="/api")
+@app.on_event("startup")
+def on_startup():
+    init_db()
 
-@app.get("/")
+app.include_router(chat.router,  prefix="/api",  tags=["Chat"])
+app.include_router(video.router, prefix="/api", tags=["Video"])
+
+@app.get("/", tags=["Status"])
 def root():
     return {"status": "ChatMath backend is running"}
-
-@app.get("/video/{filepath:path}")
-async def serve_video(filepath: str):
-    # filepath will be the relative path under media/
-    base = os.path.dirname(os.path.abspath(__file__))
-    full_path = os.path.join(base, "media", filepath)
-    if not os.path.isfile(full_path):
-        raise HTTPException(status_code=404, detail="Video not found")
-    return FileResponse(full_path, media_type="video/mp4")

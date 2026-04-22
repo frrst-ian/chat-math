@@ -1,0 +1,50 @@
+.videoWrap {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: #000;
+    overflow: hidden;
+}
+
+.controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 15px 10px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.videoWrap:hover .controls,
+.controlsVisible .controls {
+    opacity: 1;
+}
+
+.scrubTrack {
+    flex: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    position: relative;
+    transition: height 0.1s;
+}
+
+.scrubTrack:hover {
+    height: 6px;
+}
+
+.scrubFill {
+    height: 100%;
+    background: var(--accent-light);
+    border-radius: 2px;
+    width: 0%;
+}
+
+.playPause:hover, .fullscreen:hover {
+    color: var(--accent-light);
+}

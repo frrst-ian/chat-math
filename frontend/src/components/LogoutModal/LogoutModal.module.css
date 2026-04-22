@@ -1,0 +1,84 @@
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    align-items: center;
+    justify-content: center;
+}
+.modal.show { display: flex; }
+
+.backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(7, 14, 24, 0.7);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.card {
+    position: relative;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-panel);
+    border-radius: 16px;
+    padding: 28px 28px 24px;
+    width: 320px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: modalEnter 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes modalEnter {
+    from { opacity: 0; transform: scale(0.95) translateY(8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(248, 113, 113, 0.1);
+    border: 1px solid rgba(248, 113, 113, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #f87171;
+    margin-bottom: 4px;
+}
+.title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+.body {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+.actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+.btn {
+    flex: 1;
+    padding: 9px 16px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+}
+.btnCancel {
+    background: var(--bg-input);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+}
+.btnCancel:hover { background: var(--bg-hover); color: var(--text-primary); }
+.btnConfirm { background: #f87171; color: #fff; }
+.btnConfirm:hover { background: #ef4444; }

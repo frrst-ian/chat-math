@@ -5,3 +5,8 @@ venv/
 outputs/
 manim_scripts/
 .DS_Store
+media/
+backend/media/
+.env.development
+.env.production
+
