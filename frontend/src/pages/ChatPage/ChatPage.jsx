@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { useSessions } from '../../hooks/useSessions'
 import { useChat } from '../../hooks/useChat'
 import { Sidebar } from '../../components/Sidebar/Sidebar'
@@ -8,12 +8,18 @@ import LogoutModal from '../../components/LogoutModal/LogoutModal'
 import { useNavigate } from 'react-router-dom'
 import styles from './ChatPage.module.css'
 
+const MIN_WIDTH = 260
+const MAX_WIDTH = 600
+const DEFAULT_WIDTH = 430
+
 export default function ChatPage() {
   const navigate = useNavigate()
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [logoutVisible, setLogoutVisible] = useState(false)
   const [toast, setToast] = useState({ visible: false, message: '' })
+  const [panelWidth, setPanelWidth] = useState(DEFAULT_WIDTH)
   const toastTimer = useRef(null)
+  const dragging = useRef(false)
 
   const sessions = useSessions()
   const chat = useChat({
@@ -39,6 +45,27 @@ export default function ChatPage() {
     chat.resetChat()
   }
 
+  const onDragStart = useCallback((e) => {
+    dragging.current = true
+    e.preventDefault()
+
+    function onMove(e) {
+      if (!dragging.current) return
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX
+      const newWidth = window.innerWidth - clientX
+      setPanelWidth(Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, newWidth)))
+    }
+
+    function onUp() {
+      dragging.current = false
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseup', onUp)
+    }
+
+    window.addEventListener('mousemove', onMove)
+    window.addEventListener('mouseup', onUp)
+  }, [])
+
   return (
     <div className={styles.chatPage}>
       <Sidebar
@@ -59,10 +86,13 @@ export default function ChatPage() {
         onDismissToast={showToast}
       />
 
+      <div className={styles.dragHandle} onMouseDown={onDragStart} />
+
       <RightPanel
         messages={chat.messages}
         onSend={chat.sendMessage}
         locked={chat.isLoading}
+        panelWidth={panelWidth}
       />
 
       <LogoutModal

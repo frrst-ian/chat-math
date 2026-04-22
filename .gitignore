@@ -9,4 +9,4 @@ media/
 backend/media/
 .env.development
 .env.production
-
+todo.md

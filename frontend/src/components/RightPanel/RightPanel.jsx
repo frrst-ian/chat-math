@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import styles from './RightPanel.module.css'
 import Bubble from '../Bubble/Bubble'
 
-export default function RightPanel({ messages, onSend, locked }) {
+export default function RightPanel({ messages, onSend, locked, panelWidth }) {
   const inputRef = useRef(null)
   const containerRef = useRef(null)
   const [inputVal, setInputVal] = useState('')
@@ -37,7 +37,7 @@ export default function RightPanel({ messages, onSend, locked }) {
   }
 
   return (
-    <aside className={styles.rightPanel}>
+    <aside className={styles.rightPanel} style={{ width: panelWidth }} >
       <div className={styles.chatContainer} ref={containerRef} role="log" aria-live="polite" aria-label="Chat messages">
         {messages.map((m, i) => (
           <Bubble key={i} type={m.type} text={m.text} isStatus={m.isStatus} />

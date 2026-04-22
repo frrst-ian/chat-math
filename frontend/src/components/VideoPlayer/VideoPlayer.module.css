@@ -4,6 +4,14 @@
     position: relative;
     background: #000;
     overflow: hidden;
+    cursor: pointer;
+}
+
+.video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 .controls {
@@ -11,13 +19,13 @@
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 20px 15px 10px;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    padding: 32px 16px 14px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.2s ease;
 }
 
 .videoWrap:hover .controls,
@@ -25,26 +33,78 @@
     opacity: 1;
 }
 
-.scrubTrack {
-    flex: 1;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 2px;
-    position: relative;
-    transition: height 0.1s;
+.playPause {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    transition: color 0.12s, background 0.12s;
+}
+.playPause:hover {
+    color: var(--accent-light);
+    background: rgba(255,255,255,0.08);
 }
 
+.time {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.7);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+}
+
+.scrubTrack {
+    flex: 1;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    position: relative;
+    cursor: pointer;
+    transition: height 0.15s;
+}
 .scrubTrack:hover {
-    height: 6px;
+    height: 5px;
 }
 
 .scrubFill {
+    position: absolute;
+    left: 0;
+    top: 0;
     height: 100%;
     background: var(--accent-light);
-    border-radius: 2px;
-    width: 0%;
+    border-radius: 3px;
+    pointer-events: none;
+    transition: width 0.05s linear;
 }
 
-.playPause:hover, .fullscreen:hover {
-    color: var(--accent-light);
+.scrub {
+    position: absolute;
+    inset: -8px 0;
+    width: 100%;
+    height: calc(100% + 16px);
+    opacity: 0;
+    cursor: pointer;
+}
+
+.fullscreen {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.7);
+    font-size: 15px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    transition: color 0.12s, background 0.12s;
+}
+.fullscreen:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.08);
 }

@@ -1,5 +1,4 @@
 .rightPanel {
-    width: 360px;
     flex-shrink: 0;
     background: var(--bg-panel);
     border-left: 1px solid var(--border-panel);
@@ -15,7 +14,11 @@
     flex-direction: column;
     gap: 14px;
 }
-.chatContainer::-webkit-scrollbar { width: 4px; }
+
+.chatContainer::-webkit-scrollbar {
+    width: 4px;
+}
+
 .chatContainer::-webkit-scrollbar-thumb {
     background: var(--scrollbar-thumb);
     border-radius: 4px;
@@ -25,6 +28,7 @@
     padding: 10px 12px 14px;
     border-top: 1px solid var(--border-subtle);
 }
+
 .inputBar {
     display: flex;
     align-items: center;
@@ -35,10 +39,12 @@
     padding: 9px 12px;
     transition: border-color 0.15s, box-shadow 0.15s;
 }
+
 .inputBar:focus-within {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
+
 .chatInput {
     flex: 1;
     background: none;
@@ -51,7 +57,10 @@
     max-height: 120px;
     line-height: 1.5;
 }
-.chatInput::placeholder { color: var(--text-muted); }
+
+.chatInput::placeholder {
+    color: var(--text-muted);
+}
 
 .sendBtn {
     color: var(--accent);
@@ -60,4 +69,7 @@
     transition: color var(--transition-fade);
     font-size: 17px;
 }
-.sendBtn:hover { color: var(--accent-light); }
+
+.sendBtn:hover {
+    color: var(--accent-light);
+}

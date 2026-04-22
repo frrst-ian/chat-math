@@ -5,3 +5,15 @@
     overflow: hidden;
     background: var(--bg-body);
 }
+
+.dragHandle {
+    width: 4px;
+    flex-shrink: 0;
+    background: transparent;
+    cursor: col-resize;
+    transition: background 0.15s;
+    z-index: 10;
+}
+.dragHandle:hover {
+    background: var(--accent);
+}

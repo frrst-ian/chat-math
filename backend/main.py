@@ -12,7 +12,7 @@ def on_startup():
     init_db()
 
 app.include_router(chat.router,  prefix="/api",  tags=["Chat"])
-app.include_router(video.router, prefix="/api", tags=["Video"])
+app.include_router(video.router, prefix="/video", tags=["Video"])
 
 @app.get("/", tags=["Status"])
 def root():

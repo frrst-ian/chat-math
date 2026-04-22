@@ -1,14 +1,18 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
-import os
+from pathlib import Path
 
 router = APIRouter()
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUTPUTS_DIR = Path(__file__).resolve().parents[2] / "outputs"
+
+print(f"[video router] OUTPUTS_DIR: {OUTPUTS_DIR}")
 
 @router.get("/{filepath:path}")
 async def serve_video(filepath: str):
-    full_path = os.path.join(BASE_DIR, "media", filepath)
-    if not os.path.isfile(full_path):
+    full_path = OUTPUTS_DIR / filepath
+    print(f"[video] full_path: {full_path}")
+    print(f"[video] exists: {full_path.is_file()}")
+    if not full_path.is_file():
         raise HTTPException(status_code=404, detail="Video not found")
-    return FileResponse(full_path, media_type="video/mp4")
+    return FileResponse(str(full_path), media_type="video/mp4")
